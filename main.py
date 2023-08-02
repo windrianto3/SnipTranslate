@@ -1,31 +1,85 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
+from PyQt5 import uic, QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import Qt
+import utils.uisnip as uisnip
+import utils.ocr as ocr
+import utils.screencap as screencap
+from PIL.ImageQt import ImageQt
+import deepl
+#import windowdropdownbox
 
-def main():
-    app = QApplication([])
-    window = QWidget()
-    window.setGeometry(100,100,500,300)
-    window.setWindowTitle("Screencap Translator")
+class Ui(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(Ui,self).__init__()
+        uic.loadUi('gui.ui', self)
+        self.setWindowTitle("Screen Translator")
+        self.show()
 
-    layout = QVBoxLayout() #or Hbox
+        self.ocrHelper = ocr.TLHelper()
+        self.screencapHelper = screencap.ScreenCapHelper()
+        self.snipHelper = uisnip.CaptureScreen()
+        self.snipHelper.ui = self
 
-    label = QLabel("Press the Button Below to take a Screenshot")
+        self.errordialog = QtWidgets.QMessageBox()
+        self.errordialog.setWindowTitle("Error")
 
-    scbutton = QPushButton("Press me!")
-    scbutton.clicked.connect(on_clicked)
+        self.imagelabel.setScaledContents(False)
 
-    layout.addWidget(label)
-    layout.addWidget(scbutton)
+        self.snipbutton.clicked.connect(self.snipCapture)
+        self.capmonitorbutton.clicked.connect(self.desktopScreenshot)
+        self.capwindowbutton.clicked.connect(self.windowScreenshot)
+        self.windowbox.popupSignal.connect(self.updateDropdown)
+        
+        # Declare app variables
+        self.winlist = None
+        self.wintitles = None
+        self.curr_image = None
+        self.pix = None
+    
+    def updateUI(self):
+        # Update displayed image to the most recent capture
+        self.imagelabel.setPixmap(self.pix.scaled(771, 341, aspectRatioMode=QtCore.Qt.KeepAspectRatio, transformMode=QtCore.Qt.FastTransformation))
 
-    window.setLayout(layout)
+        # Run OCR and translator
+        detected_text, translated_text = self.ocrHelper.read_image(self.ocrHelper.convertPILtoCV(self.curr_image))
+        self.detectedtextbox.setPlainText(detected_text)
+        self.translatedtextbox.setPlainText(translated_text)
 
-    window.show()
-    app.exec_()
+    def desktopScreenshot(self):
+        self.curr_image = self.screencapHelper.saveDesktopScreenScreenshot()
+        qim = ImageQt(self.curr_image).copy()
+        qim_pix = QtGui.QPixmap.fromImage(qim)
+        self.pix = qim_pix
+        self.updateUI()
 
-def on_clicked():
-    msg = QMessageBox()
-    msg.setText("Hello World")
-    msg.exec()
+    def snipCapture(self):
+        self.snipHelper.show()
 
+    def updateDropdown(self):
+        self.winlist = self.screencapHelper.list_window_names()
+        self.wintitles = [x[1] for x in self.winlist]
+        self.windowbox.clear()
+        self.windowbox.addItems(self.wintitles)
+        
+    def windowScreenshot(self):
+        try:
+            self.curr_image = self.screencapHelper.saveWindow(self.windowbox.currentText().lower(), "pic.png")
+            #print("successfully grabbed window")
+            self.pix = QtGui.QPixmap.fromImage(ImageQt(self.curr_image).copy())
+            self.updateUI()
+        except deepl.exceptions.ConnectionException as ce:
+            self.errordialog.setText("Unable to connect to translation API. Please try again.")
+            self.errordialog.exec()
+        except IndexError as ie:
+            self.errordialog.setText("Selected window no longer exists.")
+            self.errordialog.exec()
+        except ValueError as ve:
+            if str(ve) == "text must not be empty":
+                self.errordialog.setText("No text detected.")
+                self.errordialog.exec()
+        
 if __name__ == '__main__':
-    main()
+    app = QtWidgets.QApplication([])
+    window = Ui()
+    app.exec_()

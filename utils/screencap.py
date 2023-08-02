@@ -19,20 +19,18 @@ class ScreenCapHelper():
 
     def saveDesktopScreenScreenshot(self):
         screenshot = pyautogui.screenshot()
-        os.chdir("..")
-        fpath=os.path.join("screenshots/desktop.png")
-        screenshot.save(fp=fpath)
+        #os.chdir("..")
+        #fpath=os.path.join("./screenshots/desktop.png")
+        #screenshot.save(fp=fpath)
         return screenshot
 
-    def saveWindowScreenshot(windowstr, winlist, save_path):
+    def saveWindow(self, windowstr, save_path):
         winlist = self.list_window_names()
         window = [(hwnd, title) for hwnd, title in winlist if windowstr in title.lower()]
         print(window)
         # just grab the hwnd for first window match
         hwnd = window[0]
         hwnd = hwnd[0]
-
-        #print(hwnd)
 
         windll.user32.SetProcessDPIAware()
 
@@ -71,10 +69,11 @@ class ScreenCapHelper():
         mfcDC.DeleteDC()
         win32gui.ReleaseDC(hwnd, hwndDC)
 
-        if result == 1:
+        #if result == 1:
             #PrintWindow Succeeded
-            im.save(save_path)
-            im.show()
+            #im.save(save_path)
+            #im.show()
+
         return im
 
     # todo: func for capturing specific rectangle from desktop

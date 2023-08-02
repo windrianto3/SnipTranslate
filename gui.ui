@@ -6,53 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
-    <height>770</height>
+    <width>882</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGraphicsView" name="graphicsView">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>50</y>
-      <width>781</width>
-      <height>351</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="translatedtext">
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>430</y>
-      <width>381</width>
-      <height>271</height>
-     </rect>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="detectedText">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>430</y>
-      <width>361</width>
-      <height>271</height>
-     </rect>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -69,7 +30,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>460</x>
       <y>410</y>
       <width>111</width>
       <height>16</height>
@@ -115,13 +76,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>Capture Monitor</string>
+     <string>Capture Screen</string>
     </property>
    </widget>
    <widget class="QPushButton" name="capwindowbutton">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>710</x>
       <y>20</y>
       <width>121</width>
       <height>23</height>
@@ -131,25 +92,107 @@
      <string>Capture Window</string>
     </property>
    </widget>
+   <widget class="QLabel" name="imagelabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>60</y>
+      <width>801</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <property name="text">
+     <string>Capture an image by using one of the above options</string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="detectedtextbox">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>440</y>
+      <width>391</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Detected text will appear here</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="translatedtextbox">
+    <property name="geometry">
+     <rect>
+      <x>453</x>
+      <y>440</y>
+      <width>381</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Translated text will appear here</string>
+    </property>
+   </widget>
+   <widget class="WindowDropdownBox" name="windowbox">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>20</y>
+      <width>331</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string extracomment="placeholder">Select a window to capture</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>874</width>
+     <width>882</width>
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="menutest">
     <property name="title">
-     <string>File</string>
+     <string>test</string>
     </property>
    </widget>
-   <addaction name="menuFile"/>
+   <addaction name="menutest"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actiontest">
+   <property name="text">
+    <string>test</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WindowDropdownBox</class>
+   <extends>QComboBox</extends>
+   <header>windowdropdownbox</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
