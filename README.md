@@ -1,4 +1,6 @@
-# translator
+# SnipTranslate
+### A serverless GUI application powered by Tesseract and DeepL that allows you to snip, OCR, and translate text onscreen.
+![ocrdeepl](https://github.com/windrianto3/SnipTranslate/assets/111911764/a13de499-4b3d-4c25-91d3-b7223b7c813e)
 
 ## Setting up the API token
 This application requires you to have a DeepL API token stored in the `.env` file to make translation API requests. To setup:
